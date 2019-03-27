@@ -1,0 +1,59 @@
+version: "3"
+services:
+  example.com:
+    # If you want docker-compose to build an image instead of using a pre-built one,
+    # then, use "build" instruction instead of "image". 
+    # If a Dockerfile is present in the same repository, then 'build' is the BEST option to use.
+    build: .
+    # image:  wordpress:5.1.1-php7.3-apache
+    labels:
+      # If you enable traefik.enabled=true, then make 100% sure that the names you provide 
+      # in host are actually pointing to the traefik server (api.example.com).
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.frontend.rule=Host:example.com,www.example.com
+      # Following is an example of using multiple hostnames in 'traefik.frontend.rule'
+      # - traefik.frontend.rule=Host:demo.example.com,www.example.com,example.com
+      # The following is just an example to show a combination of Host and PathPrefix rules.
+      # - traefik.frontend.rule=Host:demo.example.com,PathPrefix:/booking
+
+    env_file:
+      - app.env
+
+    # You will need to create this 'web-root' directory yourself, after you clone the repository.
+    # This 'web-root' is not part of the git repository, and never will be,
+    # because it contains actual 'web content' or 'uplaods'.
+    # Adjust the path for your local work-computer.
+    volumes:
+      - /home/container_data/example.com/uploads:/var/www/html/web-content/uploads
+
+
+    #########################################################################################################
+    # CPU and memory limitations:
+    # ---------------------------
+    # docker-compose version 3 supports CPU and memory limits only under 'deploy' subsection of any service.
+    # The worst thing is, that the 'deploy' section is only supported in docker swarm.
+    # So, essentially if we want to limit CPU and memory for a container, we should switch to kubernetes.
+    # The following is v2 format, and does not work under v3.
+    # cpu_percent: 5
+    # mem_limit: 50000000
+    # mem_reservation: 10m
+
+    ##########################################################################################################
+    #
+    # Below - developers don't need to modify the network definition, unless asked by the sysadmin.
+    #
+    #########################################################################################################
+
+    networks:
+      # This 'uses' the proxy-net / services-network
+      - services-network
+
+networks:
+  services-network:
+    external: true
+
+
+
+
+
