@@ -6,7 +6,7 @@ echo
 
 # Download plugins using the download.list file:
 
-if [ -r ${PLUGINS_DOWNLOAD_FILE} ] && [ -d ${PLUGINS_TARGET_DIR} ] ; then
+if [ -r ${PLUGINS_DOWNLOAD_FILE} ] && [ -d ${PLUGINS_TARGET_DIR} ] ; then
   echo "Found a file with list of plugins to download as: ${PLUGINS_DOWNLOAD_FILE} . Processing file ..."
 
   PLUGINS_URL_LIST=$(grep -v '\#' ${PLUGINS_DOWNLOAD_FILE} | grep 'http' | awk '{print $2}')

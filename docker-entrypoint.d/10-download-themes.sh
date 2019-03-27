@@ -4,7 +4,7 @@ echo "-----> Downloading themes - if any ..."
 echo 
 
 # Download themes using the download.list file:
-if [ -r ${THEMES_DOWNLOAD_FILE} ] && [ -d ${THEMES_TARGET_DIR} ] ; then
+if [ -r ${THEMES_DOWNLOAD_FILE} ] && [ -d ${THEMES_TARGET_DIR} ] ; then
   echo "Found a file with list of themes to download as: ${THEMES_DOWNLOAD_FILE} . Processing file ..."
 
   THEMES_URL_LIST=$(grep -v '\#' ${THEMES_DOWNLOAD_FILE} | grep 'http' | awk '{print $2}')
