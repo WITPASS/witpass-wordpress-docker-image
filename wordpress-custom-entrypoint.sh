@@ -43,10 +43,15 @@ ENTRYPOINT_DIRECTORY=/docker-entrypoint.d
 # Since we will overwrite the entrypoint ourselves and use our custom script, 
 # it is imporant to source the main entrypoint in this script, let it do it's thing and then we run our script.
 
+# echo "DEBUG: /var/www/html - BEFORE:"
+# ls -lR  /var/www/html
+
 if [ -r /usr/local/bin/docker-entrypoint.sh ]; then
   source /usr/local/bin/docker-entrypoint.sh
 fi
 
+# echo "DEBUG: /var/www/html - AFTER:"
+# ls -lR /var/www/html
 
 ############ START - Custom Entrypoint logic ###############
 
