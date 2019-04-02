@@ -75,7 +75,13 @@ Here is the visual structure of the wordpress website's repository - using this 
 
 # Build instructions for **this** image: 
 ```
-[kamran@kworkhorse witpass-wordpress-docker-image]$ docker build -t witline/wordpress-5.1.1-php7.3-apache .
+docker build -t witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t witline/wordpress:latest . 
+
+```
+
+```
+[kamran@kworkhorse witpass-wordpress-docker-image]$ docker build -t witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t witline/wordpress:latest .
+
 Sending build context to Docker daemon    194kB
 Step 1/6 : FROM wordpress:5.1.1-php7.3-apache
  ---> 2db7620e78b0
@@ -95,6 +101,7 @@ Step 6/6 : CMD ["apache2-foreground"]
 Removing intermediate container 4a6ce219e6de
  ---> 226bcc7d8802
 Successfully built 226bcc7d8802
-Successfully tagged witline/wordpress-5.1.1-php7.3-apache:latest
+Successfully tagged witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0
+Successfully tagged witline/wordpress:latest
 [kamran@kworkhorse witpass-wordpress-docker-image]$ 
 ```
