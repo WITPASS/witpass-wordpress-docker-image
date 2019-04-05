@@ -204,3 +204,4 @@ Successfully tagged witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0
 Successfully tagged witline/wordpress:latest
 [kamran@kworkhorse witpass-wordpress-docker-image]$ 
 ```
+
