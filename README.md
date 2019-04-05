@@ -1,5 +1,7 @@
-# What is this image?
-A custom wordpress docker image, with following features:
+# Introduction:
+This custom wordpress image is the simplest way to bring up a wordpress website, in an **immutable** way - using witline (now witpass) wordpress image. 
+
+It has the following features:
 * ablility to copy and install user provided plugins and themes into the docker image
 * can run any number of custom scripts; simply place them under `docker-entrypoint.d/`
 * our custom script first calls the official wordpress `docker-entrypoint.sh`, and only after that it runs custom scripts
@@ -76,7 +78,7 @@ Here is how it looks like:
 
 # How to use this image:
 * Clone this repository on your computer, and save it with the name of the website you are going to setup, e.g. `example.com` . 
- * **Note:** As soon as you are done cloning, remove the `.git/` directory completely from inside of this newly created directory. **This is mandatory.**. The `.git` directory contains the references to the original repository, and if you make changes, and do a `git push` , you will be actually pushing to the source repository ,which is not what we want you to do.  
+ * **Note:** As soon as you are done cloning, remove the `.git/` directory completely from inside of this newly created directory. **This is mandatory.**. The `.git` directory contains the references to the original repository, and if you make changes, and do a `git push` , you will actually be (trying to) pushing to the source repository, which is not what we want you to do. (and, it won't work :)
  * You can make copies of this repository on your local computer by using operating system's copy commands. In that case too, you will need to immediately delete the `.git/` directory from inside of the newly created directories.
 * Setup a MySQL database to hold this site's database stuff, and/or keep the DB credentials handy. There are several ways to do it. To ease development, the `docker-compose.yml.localpc` file contains a mysql service definition. Just adjust the path of persistent storage for mysql and use that as test mysql db for wordpress.
 * Setup a persistent storage on the computer to hold this website's **uploads** . This location will be specified in `docker-compose.yml.localpc` and/or `docker-compose.yml.server` files, and will be mounted at `/var/www/html/wp-content/uploads` when the container is started using `docker-compose up -d` command. An example of this directory is: `/home/kamran/tmp/example.com/uploads` . You will need to make sure that you do a frequent backup of this location.
@@ -86,6 +88,23 @@ Here is how it looks like:
 * Adjust `app.env` with the environment variables related to this particular website.
 * Make sure that you adjust `docker-compose.yml.localpc` file with correct values, while you are working on your local computer. The person who is deploying this website on the server is responsible for adjusting `docker-compose.yml.server` according to the setup/environment in the server.
 * Also ensure that the name resolution/DNS is in place. On your local computer you can use `/etc/hosts` , but for setup to work on the server, the website/domain should have correct DNS settings in the related domain registrar.
+
+
+## Actual commands to run on a developer's local pc:
+Clone the [example repo](https://github.com/WITPASS/example-wordpress-website.git) and setup the necessary file-system directories on your local pc:
+
+```shell
+cd ~  
+git clone https://github.com/WITPASS/example-wordpress-website.git
+
+cd example-wordpress-website
+
+ # Check which paths you need to adjust in docker-compsoe.yml.localpc file - for wordpress and mysql:
+grep -A1 volumes docker-compose.yml.localpc | grep -v \#
+
+ # Copy and adjust app.env
+cp app.env.example app.env
+```
  
 Bring up the image using:
 ```
@@ -148,14 +167,15 @@ GITHUB_TOKEN=base64encodedgithubtoken
 
 # General advice for security and performance:
 * Only use plugins and themes which are well reputed.
-* Fancy looks are always **less important** than security and performance.
-* If a plugin or theme increases CPU or memory utilization, then you should not use it.
+* **Fancy looks** are always **less important**.
+* **Security** and **performance** are **most important**.
+* If a plugin or theme increases CPU or memory utilization, then you must not use it.
 
 
 # Build instructions for **this** image: 
+
 ```
 docker build -t witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t witline/wordpress:latest . 
-
 ```
 
 ```
