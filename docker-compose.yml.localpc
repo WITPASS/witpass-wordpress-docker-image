@@ -32,16 +32,22 @@ services:
     ports:
       - 80:80
 
+    depends_on:
+      - db.local
 
-  db.example.com:
+  db.local:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: supersecret
-      # MySQL will create database, user-name and user-password at container boot time,
-      #   ,with following values/settings.
-      MYSQL_DATABASE: db_example_com
-      MYSQL_USER: user_example_com
+      # MySQL will create: database, user-name and user-password at container boot time,
+      #   , with following values/settings.
+      MYSQL_DATABASE: db_wordpress
+      MYSQL_USER: user_wordpress
       MYSQL_PASSWORD: secret
+
+    # If you want a throw-away database every time you start the compose stack, 
+    #   , and you do not want to bother creating the data directory for mysql,
+    #   , then simply disable volumes section completely. (following two lines)
     volumes:
       - /home/kamran/tmp/example.com/mysql-data-dir:/var/lib/mysql
 
@@ -52,12 +58,11 @@ services:
 
 
 
-
-    ##########################################################################################################
-    #
-    # Below - developers don't need to modify the network definition, unless asked by the sysadmin.
-    #
-    #########################################################################################################
+#########################################################################################################
+#
+# Below - developers don't need to modify the network definition, unless asked by the sysadmin.
+#
+#########################################################################################################
 
 
 # disable networks section completely on your local computer.

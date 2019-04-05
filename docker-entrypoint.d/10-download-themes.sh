@@ -13,9 +13,11 @@ if [ -r ${THEMES_DOWNLOAD_FILE} ] && [ -d ${THEMES_TARGET_DIR} ] ; then
     URL_BASE_NAME=$(basename ${THEME_URL})
     curl -sL ${THEME_URL} -o ${THEMES_TARGET_DIR}/${URL_BASE_NAME}
 
-    # Unzip the file (quitely) and remove the zip file, all in a subshell, so scipt's current dir is not affected. 
+    # Unzip the file (quitely) and overwrite without asking,
+    #  , and remove the zip file, all in a subshell, 
+    #  , so scipt's current dir is not affected. 
     # pwd
-    ( cd ${THEMES_TARGET_DIR} ; unzip -q ${URL_BASE_NAME} ; rm ${URL_BASE_NAME} )
+    ( cd ${THEMES_TARGET_DIR} ; unzip -q -o ${URL_BASE_NAME} ; rm ${URL_BASE_NAME} )
     # pwd
   done
 else

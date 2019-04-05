@@ -15,9 +15,11 @@ if [ -r ${PLUGINS_DOWNLOAD_FILE} ] && [ -d ${PLUGINS_TARGET_DIR} ] ; then
     URL_BASE_NAME=$(basename ${PLUGIN_URL})
     curl -sL ${PLUGIN_URL} -o ${PLUGINS_TARGET_DIR}/${URL_BASE_NAME}
 
-    # Unzip the file (quitely) and remove the zip file, all in a subshell, so scipt's current dir is not affected. 
+    # Unzip the file (quitely) and overwrite files if exist 
+    #   , and remove the zip file, all in a subshell, 
+    #   , so scipt's current dir is not affected. 
     # pwd
-    ( cd ${PLUGINS_TARGET_DIR} ; unzip -q ${URL_BASE_NAME} ; rm ${URL_BASE_NAME} )
+    ( cd ${PLUGINS_TARGET_DIR} ; unzip -q -o ${URL_BASE_NAME} ; rm ${URL_BASE_NAME} )
     # pwd
   done
 

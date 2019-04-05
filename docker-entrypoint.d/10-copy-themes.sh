@@ -20,7 +20,7 @@ if [ -d ${THEMES_SOURCE_DIR} ]; then
     echo "Processing various themes directories found under ${THEMES_SOURCE_DIR} ..."
     for THEME_DIR in ${THEMES_DIR_LIST}; do
       echo "Copying theme-directory from location: ${THEME_DIR} ... to  ${THEMES_TARGET_DIR}/"
-      cp -r ${THEME_DIR} ${THEMES_TARGET_DIR}/
+      cp -a ${THEME_DIR} ${THEMES_TARGET_DIR}/
     done
   fi
 

@@ -23,7 +23,7 @@ if [ -d ${PLUGINS_SOURCE_DIR} ]; then
 
     for PLUGIN_DIR in ${PLUGINS_DIR_LIST}; do
       echo "Copying plugin-directory from location: ${PLUGIN_DIR} ... to  ${PLUGINS_TARGET_DIR}/"
-      cp -r ${PLUGIN_DIR} ${PLUGINS_TARGET_DIR}/
+      cp -a ${PLUGIN_DIR} ${PLUGINS_TARGET_DIR}/
     done
 
   fi
