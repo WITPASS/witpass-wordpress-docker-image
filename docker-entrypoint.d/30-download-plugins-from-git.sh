@@ -37,14 +37,16 @@ if [ -r ${PLUGINS_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${PLUGINS
     URL_BASE_NAME=$(basename ${PLUGIN_GIT_URL} | sed 's/\.git$//g')
     # clone the repo (quitely) and move it to target location, all in a subshell, so scipt's current dir is not affected. 
     ( 
+      # delete any existing directory otherwise git will complain.
+      rm -fr ${URL_BASE_NAME}
       git clone ${FULL_GIT_REPO_URL}
       mv ${URL_BASE_NAME} ${PLUGINS_TARGET_DIR}/
     )
   done
 else
   echo "Maybe Git is not setup in this container," 
-  echo "or, the file with list of plugins to download was not found under plugins/ directory."
-  echo "or, ${PLUGINS_TARGET_DIR} does not exist."
+  echo "  or, the file with list of plugins to download was not found under plugins/ directory."
+  echo "  or, ${PLUGINS_TARGET_DIR} does not exist."
   echo "Skipping plugin download ..."
 fi
 
