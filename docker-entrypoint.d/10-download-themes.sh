@@ -10,9 +10,17 @@ if [ -r ${THEMES_DOWNLOAD_FILE} ] && [ -d ${THEMES_TARGET_DIR} ] ; then
 
   # If grep does not find anything it exits with exit code 1, 
   #   which is ok in general, but docker execution of script fails unexpectedly.
-  #   Therefore, it is important to OR true (|| true) every possibility of exit code 1 in the command below:
+  # So any grep command in a chain of pipes can fail (match not found), 
+  #   and can case docker-compose to fail during startup.
+  #   Therefore, it is important to use 'something' to suppress error mesasges or error exit codes:
+  # That something is sed, which does not return exit code 1 in case of match-not-found.
 
-  THEMES_URL_LIST=$(grep -v \#  ${THEMES_DOWNLOAD_FILE} || true | grep 'http' || true | awk '{print $2}' || true)
+  # The following fails (during docker run only), 
+  #   , if there are no lines with http (file empty), or there are no lines with # sign. VERY SILLY
+
+  # THEMES_URL_LIST=$(grep 'http' ${THEMES_DOWNLOAD_FILE}  | grep -v '\#' | awk '{print $2}' )
+
+  THEMES_URL_LIST=$(cat ${THEMES_DOWNLOAD_FILE} | sed -n '/http/p' | sed '/\#/d' | awk '{print $2}')
   
   # Note: the if check below is different from ${VARIABLE+x} , 
   #  because ${VARIABLE+x} checks if variable exists, 
