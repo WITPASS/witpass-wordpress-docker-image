@@ -41,7 +41,7 @@ if [ -r ${THEMES_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${THEMES_T
       # clone the repo (quitely) and move it to target location, all in a subshell, so scipt's current dir is not affected. 
       ( 
         # remove existing directory, else git clone will complain
-        rm -fr ${URL_BASE_NAME}
+        rm -fr ${URL_BASE_NAME}  ${THEMES_TARGET_DIR}/${URL_BASE_NAME} 
         git clone ${FULL_GIT_REPO_URL}
         mv ${URL_BASE_NAME} ${THEMES_TARGET_DIR}/
       )

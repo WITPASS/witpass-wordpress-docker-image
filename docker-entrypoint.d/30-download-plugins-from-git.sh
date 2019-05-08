@@ -41,7 +41,7 @@ if [ -r ${PLUGINS_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${PLUGINS
       # clone the repo (quitely) and move it to target location, all in a subshell, so scipt's current dir is not affected. 
       ( 
         # delete any existing directory otherwise git will complain.
-        rm -fr ${URL_BASE_NAME}
+        rm -fr ${URL_BASE_NAME}  ${PLUGINS_TARGET_DIR}/${URL_BASE_NAME}
         git clone ${FULL_GIT_REPO_URL}
         mv ${URL_BASE_NAME} ${PLUGINS_TARGET_DIR}/
       )

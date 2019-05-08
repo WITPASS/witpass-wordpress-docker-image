@@ -35,8 +35,11 @@ else
      # It is important to do this, otherwise apache complains about uid not matching to an existing user.
     
      echo "Creating a user with UID ${user} and GID ${group} ..."
-     groupadd -g ${group} site-owner
-     useradd -u ${user} -g ${group}  --no-create-home --home-dir /var/www/html site-owner 
+     # The (OR TRUE) (|| true) is added because it is possible that the container has already run once,
+     #   , and the user already exists. This logic needs to improve though.
+
+     groupadd -g ${group} site-owner || true
+     useradd -u ${user} -g ${group}  --no-create-home --home-dir /var/www/html site-owner  || true
 
      echo "Changing ownership of ${APACHE_DOC_ROOT} to ${user}:${group} - recursively ..." 
      chown -R ${user}:${group} ${APACHE_DOC_ROOT}

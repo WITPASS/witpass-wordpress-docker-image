@@ -9,9 +9,17 @@ echo
 if [ -r ${PLUGINS_DOWNLOAD_FILE} ] && [ -d ${PLUGINS_TARGET_DIR} ] ; then
   echo "Found a file with list of plugins to download as: ${PLUGINS_DOWNLOAD_FILE} . Processing file ..."
 
-  PLUGINS_URL_LIST=$(grep -v '\#' ${PLUGINS_DOWNLOAD_FILE} | grep 'http' | awk '{print $2}')
+  # If grep does not find anything it exits with exit code 1, 
+  #   which is ok in general, but docker execution of script fails unexpectedly.
+  #   Therefore, it is important to OR true (|| true) every possibility of exit code 1 in the command below:
 
-  if [ -z ${PLUGINS_URL_LIST+x} ]; then
+  PLUGINS_URL_LIST=$(grep -v \#  ${PLUGINS_DOWNLOAD_FILE} || true | grep 'http' || true | awk '{print $2}' || true)
+
+  # Note: the if check below is different from ${VARIABLE+x} ,
+  #  because ${VARIABLE+x} checks if variable exists,
+  #  whereas `-z "${VARIABLE}"` checks if variable is null"
+
+  if [ -z "${PLUGINS_URL_LIST}" ]; then
     echo "The plugins file - ${PLUGINS_DOWNLOAD_FILE} is empty, skipping plugins downloads ..."
   else
 
