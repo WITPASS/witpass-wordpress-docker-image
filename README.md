@@ -24,7 +24,7 @@ $ tree
 ├── app.env.example
 ├── custom-git-issues.sh
 ├── docker-compose.yml -> docker-compose.server.yml
-├── docker-compose.devpv.yml
+├── docker-compose.devpc.yml
 ├── docker-compose.server.yml
 ├── Dockerfile
 ├── docs
@@ -80,13 +80,13 @@ Here is how it looks like:
 * Clone this repository on your computer, and save it with the name of the website you are going to setup, e.g. `example.com` . 
  * **Note:** As soon as you are done cloning, remove the `.git/` directory completely from inside of this newly created directory. **This is mandatory.**. The `.git` directory contains the references to the original repository, and if you make changes, and do a `git push` , you will actually be (trying to) pushing to the source repository, which is not what we want you to do. (and, it won't work :)
  * You can make copies of this repository on your local computer by using operating system's copy commands. In that case too, you will need to immediately delete the `.git/` directory from inside of the newly created directories.
-* Setup a MySQL database to hold this site's database stuff, and/or keep the DB credentials handy. There are several ways to do it. To ease development, the `docker-compose.devpv.yml` file contains a mysql service definition. Just adjust the path of persistent storage for mysql and use that as test mysql db for wordpress.
-* Setup a persistent storage on the computer to hold this website's **uploads** . This location will be specified in `docker-compose.devpv.yml` and/or `docker-compose.server.yml` files, and will be mounted at `/var/www/html/wp-content/uploads` when the container is started using `docker-compose up -d` command. An example of this directory is: `/home/kamran/tmp/example.com/uploads` . You will need to make sure that you do a frequent backup of this location.
+* Setup a MySQL database to hold this site's database stuff, and/or keep the DB credentials handy. There are several ways to do it. To ease development, the `docker-compose.devpc.yml` file contains a mysql service definition. Just adjust the path of persistent storage for mysql and use that as test mysql db for wordpress.
+* Setup a persistent storage on the computer to hold this website's **uploads** . This location will be specified in `docker-compose.devpc.yml` and/or `docker-compose.server.yml` files, and will be mounted at `/var/www/html/wp-content/uploads` when the container is started using `docker-compose up -d` command. An example of this directory is: `/home/kamran/tmp/example.com/uploads` . You will need to make sure that you do a frequent backup of this location.
 * If you intend to download any custom plugins or themes which are actually in a private fit repository, then you need to provide your github username and a github token. You can create a github token just for this specific person against your github user. If you don't then you do not need to provide github_user or github_token. 
 * Find the id of the OS user you are logged in as on your computer. This will be used to set correct ownership and permissions for the `uploads` directory.
 * Create `app.env` by copying `app.env.example` file. 
 * Adjust `app.env` with the environment variables related to this particular website.
-* Make sure that you adjust `docker-compose.devpv.yml` file with correct values, while you are working on your local computer. The person who is deploying this website on the server is responsible for adjusting `docker-compose.server.yml` according to the setup/environment in the server.
+* Make sure that you adjust `docker-compose.devpc.yml` file with correct values, while you are working on your local computer. The person who is deploying this website on the server is responsible for adjusting `docker-compose.server.yml` according to the setup/environment in the server.
 * Also ensure that the name resolution/DNS is in place. On your local computer you can use `/etc/hosts` , but for setup to work on the server, the website/domain should have correct DNS settings in the related domain registrar.
 
 
@@ -100,7 +100,7 @@ git clone https://github.com/WITPASS/example-wordpress-website.git
 cd example-wordpress-website
 
  # Check which paths you need to adjust in docker-compsoe.yml.localpc file - for wordpress and mysql:
-grep -A1 volumes docker-compose.devpv.yml | grep -v \#
+grep -A1 volumes docker-compose.devpc.yml | grep -v \#
 
  # Copy and adjust app.env
 cp app.env.example app.env
@@ -108,14 +108,14 @@ cp app.env.example app.env
  
 Bring up the image using:
 ```
-$ docker-compose -f docker-compose.devpv.yml build --no-cache
-$ docker-compose -f docker-compose.devpv.yml up -d
+$ docker-compose -f docker-compose.devpc.yml build --no-cache
+$ docker-compose -f docker-compose.devpc.yml up -d
 ```
 **Note:** It is important to **build** the image *before* bringing it **up**. It is also important to use the `--no-cache` option when building the image.
 
 Check status of the container:
 ```
-$ docker-compose -f docker-compose.devpv.yml ps
+$ docker-compose -f docker-compose.devpc.yml ps
 
 or
 
@@ -124,7 +124,7 @@ $ docker ps
 
 Check logs:
 ```
-$ docker-compose -f docker-compose.devpv.yml logs -f
+$ docker-compose -f docker-compose.devpc.yml logs -f
 
 or
 
@@ -133,8 +133,8 @@ $ docker logs -f <container-name|container-id>
 
 Stop container and remove container image using `docker-compose`:
 ```
-$ docker-compose -f docker-compose.devpv.yml stop  <container-name|container-id> 
-$ docker-compose -f docker-compose.devpv.yml rm -f  <container-name|container-id> 
+$ docker-compose -f docker-compose.devpc.yml stop  <container-name|container-id> 
+$ docker-compose -f docker-compose.devpc.yml rm -f  <container-name|container-id> 
 ```
 
 
