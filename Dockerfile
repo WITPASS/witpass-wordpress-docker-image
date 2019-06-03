@@ -1,4 +1,5 @@
-FROM wordpress:5.1.1-php7.3-apache
+# FROM wordpress:5.1.1-php7.3-apache
+FROM wordpress:5.2.1-php7.3-apache
 
 # Remove the 'exec'  instruction from original docker-entrypoint.sh ,
 #   which will help us inject our own script in the container,
