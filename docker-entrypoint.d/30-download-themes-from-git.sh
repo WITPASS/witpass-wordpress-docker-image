@@ -8,9 +8,9 @@ echo
 if [ -r ${THEMES_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${THEMES_TARGET_DIR} ] ; then
   echo "Found a file with list of themes to download from git - as: ${THEMES_GIT_REPOS_FILE} . Processing file ..."
 
-  THEMES_GIT_URL_LIST=$(grep -v '\#' ${THEMES_GIT_REPOS_FILE} | egrep "http|https" | awk '{print $2}')
-
-  if [ -z ${THEMES_GIT_URL_LIST+x} ]; then
+  # THEMES_GIT_URL_LIST=$(grep -v '\#' ${THEMES_GIT_REPOS_FILE} | egrep "http|https" | awk '{print $2}')
+  THEMES_GIT_URL_LIST=$(cat ${THEMES_GIT_REPOS_FILE} | sed -n '/http/p' | sed '/\#/d' | awk '{print $2}')
+  if [ -z "${THEMES_GIT_URL_LIST}" ]; then
     echo "The themes file - ${THEMES_GIT_REPOS_FILE} is empty, skipping themes download ..."
   else
 
@@ -22,7 +22,7 @@ if [ -r ${THEMES_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${THEMES_T
         echo "Syntax of  GIT repository URL ${THEME_GIT_URL} seem to be OK."
       else
         echo "Syntax of GIT repository URL ${THEME_GIT_URL} is not OK." 
-  	echo "The URL in the ${THEME_GIT_REPOS_FILE} file needs to be a git repo (so we can clone it)"
+  	echo "The URL in the file ${THEMES_GIT_REPOS_FILE} needs to be a git repo - (URL ending in .git) - so we can clone it!"
 	echo "Ignoring ${THEME_GIT_URL} ..."
 	continue
       fi

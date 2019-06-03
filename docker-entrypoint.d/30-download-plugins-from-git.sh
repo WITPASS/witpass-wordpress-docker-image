@@ -9,8 +9,9 @@ echo
 if [ -r ${PLUGINS_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${PLUGINS_TARGET_DIR} ] ; then
   echo "Found a file with list of plugins to download from git - as: ${PLUGINS_GIT_REPOS_FILE} . Processing file ..."
 
-  PLUGINS_GIT_URL_LIST=$(grep -v '\#' ${PLUGINS_GIT_REPOS_FILE} | egrep "http|https" | awk '{print $2}')
-  if [ -z ${PLUGINS_GIT_URL_LIST+x} ]; then
+  PLUGINS_GIT_URL_LIST=$(cat ${PLUGINS_GIT_REPOS_FILE} | sed -n '/http/p' | sed '/\#/d' | awk '{print $2}')
+  # PLUGINS_GIT_URL_LIST=$(grep -v '\#' ${PLUGINS_GIT_REPOS_FILE} | egrep "http|https" | awk '{print $2}')
+  if [ -z "${PLUGINS_GIT_URL_LIST}" ]; then
     echo "The plugins file - ${PLUGINS_GIT_REPOS_FILE} is empty, skipping plugins download ..."
   else
 
@@ -23,7 +24,7 @@ if [ -r ${PLUGINS_GIT_REPOS_FILE} ] && [ "${USE_GIT}" == "1" ] && [ -d ${PLUGINS
         echo "Syntax of  GIT repository URL ${PLUGIN_GIT_URL} seem to be OK."
       else
         echo "Syntax of GIT repository URL ${PLUGIN_GIT_URL} is not OK." 
-	echo "The URL in the ${PLUGIN_GIT_REPOS_FILE} file needs to be a git repo (so we can clone it)"
+	echo "The URL in the file ${PLUGINS_GIT_REPOS_FILE}  needs to be a git repo - (URL ending in .git) - so we can clone it!"
 	echo "Ignoring ${PLUGIN_GIT_URL} ..."
 	continue
       fi
