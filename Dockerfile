@@ -1,10 +1,9 @@
-# FROM wordpress:5.1.1-php7.3-apache
-FROM wordpress:5.2.1-php7.3-apache
+FROM wordpress:5.2.2-php7.3-apache
 
-# Remove the 'exec'  instruction from original docker-entrypoint.sh ,
+# Below, we remove the 'exec'  instruction from original docker-entrypoint.sh ,
 #   which will help us inject our own script in the container,
 #   which, in-turn calls the original docker-entrypoint.sh.
-# Also install OS tools, e.g. unzip,  gitetc.
+# Also install OS tools, e.g. unzip,  git, etc.
 # Also do othe prep work on the OS before we do anything else.
 
 RUN sed -i '/^exec/d' /usr/local/bin/docker-entrypoint.sh \
@@ -26,15 +25,21 @@ COPY docker-entrypoint.d /docker-entrypoint.d/
 # Copy our custom entrypoint script to /usr/local/bin/
 COPY wordpress-custom-entrypoint.sh /usr/local/bin/
 
+# Copy MPM-prefork with custom/tuned values for resource usage.
+# Modify this file to increase the resource utilization.
+COPY mpm_prefork.conf  /etc/apache2/mods-enabled/mpm_prefork.conf
+
 # We run our own wordpress-custom-docker-entrypoint.sh, 
 # which first calls the actual docker-entrypoint.sh and then runs our theme and plugin management logic.
 #  When ENTRYPOINT is present in a dockerfile, it is always run before executing CMD.
 ENTRYPOINT ["/usr/local/bin/wordpress-custom-entrypoint.sh"]
 
+# ######################################################################################################
 # Enable the following if you want to run wordpress's own docker-entrypoint.sh.
 # If you choose to do this, then remember to disable/remove the sed in the beginning of this Dockerfile,
 #   which removes a key (exec) instruction from official docker-entrypoint.sh .
 # ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# ######################################################################################################
 
 # Run apache in foreground as the last process in the container.
 CMD ["apache2-foreground"]
