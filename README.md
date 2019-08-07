@@ -12,6 +12,7 @@ It has the following features:
 * Plugins and themes are not stored in persistent storage.
 * Plugins and themes are specified as configuration.
 * The only piece of data, you need to keep persistent - and take backup of - is the `wp-content/uploads` directory.
+* Reduced memory footprint, because of adjustments made in `mpm-prefork.conf` file. Adjust values in this file to suit your needs. For small sites expecting ~128 connections simultaneously, on low powered (low RAM) servers, the values we provide seem to be good enough.
 
 **Note:** You are not stopped from experimenting with themes and plugins of your choice. You can install them through the WordPress admin panel of your website, **but** any plugins and themes installed this way will not survive container restart. After your experimentation, you add the plugin(s) and themes(s) of your choice in the related config files in this repository.
 
@@ -139,12 +140,12 @@ $ docker-compose -f docker-compose.devpc.yml rm -f  <container-name|container-id
 
 
 # Environment variables:
-* Use `app.env` file to pass environment variables to the docker-compose application. This file is part of `.gitignore` and must remain so.
+* Use `app.env` file (or some other filename, wnding in `.env`)  to pass environment variables to the docker-compose application. This file is part of `.gitignore` and must remain so.
 * Ensure that you encode your git token with 
 base64 before placing it in `app.env` . Here is how you can convert your git token into base64 representation:
 
 ```
-$ MY_GITHUB_TOKEN='yourgithubtokenyouobtainedfromgithub'
+$ MY_GITHUB_TOKEN='your-github-token-you-obtained-from-github'
 $ echo ${MY_GITHUB_TOKEN} | base64 -w 0 
 ```
 
@@ -162,7 +163,7 @@ WORDPRESS_TABLE_PREFIX=wp_
 APACHE_RUN_USER=#1000
 APACHE_RUN_GROUP=#1000
 GITHUB_USER=kamran
-GITHUB_TOKEN=base64encodedgithubtoken
+GITHUB_TOKEN=base64-encoded-github-token
 ```
 
 # General advice for security and performance:
@@ -175,14 +176,14 @@ GITHUB_TOKEN=base64encodedgithubtoken
 # Build instructions for **this** image: 
 
 ```
-docker build -t witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t witline/wordpress:latest . 
+docker build -t local/wordpress:5.2.2-php-7.3-apache-2.4-v-1.0  -t local/wordpress:latest . 
 ```
 
 ```
-[kamran@kworkhorse witpass-wordpress-docker-image]$ docker build -t witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t witline/wordpress:latest .
+[kamran@kworkhorse witpass-wordpress-docker-image]$ docker build -t local/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0  -t local/wordpress:latest .
 
 Sending build context to Docker daemon    194kB
-Step 1/6 : FROM wordpress:5.1.1-php7.3-apache
+Step 1/6 : FROM wordpress:5.2.2-php7.3-apache
  ---> 2db7620e78b0
 Step 2/6 : RUN sed -i '/^exec/d' /usr/local/bin/docker-entrypoint.sh     && mkdir /usr/src/themes /usr/src/plugins  /docker-entrypoint.d     && apt-get update && apt-get -y install git unzip && apt-get clean
  ---> Using cache
@@ -200,8 +201,8 @@ Step 6/6 : CMD ["apache2-foreground"]
 Removing intermediate container 4a6ce219e6de
  ---> 226bcc7d8802
 Successfully built 226bcc7d8802
-Successfully tagged witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0
-Successfully tagged witline/wordpress:latest
+Successfully tagged local/wordpress:5.2.2-php-7.3-apache-2.4-v-1.0
+Successfully tagged local/wordpress:latest
 [kamran@kworkhorse witpass-wordpress-docker-image]$ 
 ```
 
